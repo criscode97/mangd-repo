@@ -1,0 +1,148 @@
+{% extends "layout.html" %} {% block title %} index {% endblock %} {% block main
+%}
+<script>
+  function parse_time(date_time) {
+    let m = moment(date_time, "YYYY-MM-DD hh:mm:ss");
+    return m.format("dddd, MMM Do YYYY, [by] h:mm a");
+  }
+</script>
+<!--container py-5 ensures that the content stays centered-->
+<div class="container py-5 h-100" >
+  <h2><p>My Todos </p></h2>
+
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#todoModal">
+    <i class="fa fa-plus"></i> Add a Todo
+  </button> 
+
+<!-- View options section -->
+
+  <div class="row m-1 p-3 px-5 justify-content-end">
+    <div class="col-auto d-flex align-items-center">
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Filter by
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="/filter_by/completed" data-value="completed">Completed</a>
+          <a class="dropdown-item" href="/filter_by/pending" data-value="pending">Pending</a>
+          <a class="dropdown-item" href="/filter_by/has-due-date" data-value="has-due-date">Has due date</a>
+          <a class="dropdown-item" href="/" data-value="all">All </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+    <!--list of todos for the user-->
+    {%for todo in my_todos.items %}
+    <ul class="list-group list-group-horizontal-lg rounded-0 bg-transparent">
+      <!--todo title-->
+      <li class="list-group-item p-2 rounded-0 border-0 bg-transparent">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
+        <label class="form-check-label" for="{{todo.id}}">
+        {% if todo.stat==True%}
+          <h3 class="text-muted"><del>{{todo.title}}</del></h3>
+        {% else %}
+          <h3><b>{{todo.title}}</b></h3>
+        {% endif %}
+        </label>
+      </li>
+      <li class="list-group-item ml-auto rounded-0 border-0 bg-transparent">
+        <ul class="list-group list-group-horizontal-lg rounded-0 bg-transparent">
+          <li class="list-group-item ml-auto rounded-0 border-0 bg-transparent">
+            {% if todo.deadline != None%}
+              <div
+                class="
+                  py-2
+                  px-3
+                  me-2
+                  border border-warning
+                  rounded-3
+                  d-flex
+                  align-items-center
+                  bg-light
+                "
+              >
+                <p class="small mb-0">
+                due on:
+                <script type="text/javascript">
+                  document.write(parse_time("{{ todo.deadline }}"));
+                </script>
+                </p>
+              </div>
+            {% endif %}
+          </li>
+        <li class="list-group-item ml-auto rounded-0 border-0 bg-transparent">
+          <a href="/status/{{todo.id}}">
+            {% if todo.stat == True %}
+            <button type="button" class="btn btn-success ml-auto">COMPLETED</button>
+            {% else %}
+            <button
+              href="/status/{{todo.id}}"
+              type="button"
+              class="btn btn-warning ml-auto"
+            >
+              Pending...
+            </button>
+            {% endif %}
+          </a>
+          <a href="/delete/{{todo.id}}">
+            <button class="btn btn-danger ml-auto">Delete</button>
+          </a>
+            </li>
+          </ul>
+        </li>
+    
+    
+      </li>
+    </ul>
+      {% endfor %}
+    
+
+
+<!--pagination-->
+<div class="mr-auto">
+  {% for page_num in my_todos.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2)%}
+    {% if page_num %}
+      {% if my_todos.page == page_num%}
+        <a class="btn btn-info mb-4" href="{{ url_for('todos.todos', page=page_num) }}">{{page_num}}</a>
+      {% else %}
+        <a class="btn btn-outline-info mb-4" href="{{ url_for('todos.todos', page=page_num) }}">{{page_num}}</a>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+</div>
+  
+<div class="modal fade" id="todoModal" tabindex="-1" role="dialog" aria-labelledby="todoModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="todoModalLabel">Add a To-Do</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/" method="POST">
+            <input
+              autocomplete="off"
+              placeholder="Enter To-Do Item..."
+              type="text"
+              name="todo-item"
+              class="form-control form-control-lg"
+            />
+            <label for"deadline" class="text-muted">Add a deadline:</label>
+            <input type="datetime-local" id="deadline" name="deadline" placeholder="deadline" />
+          </div>
+          <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
