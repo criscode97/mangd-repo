@@ -15,8 +15,8 @@ users = Blueprint('users', __name__)
 # initialize oauth
 google = oauth.register(
     name="google",
-    client_id="947521785952-6837imfbg9md1crc87neaplgmo5alads.apps.googleusercontent.com",
-    client_secret="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",
+    client_id=os.environ['client_id'],
+    client_secret=os.environ['client_secret'],
     access_token_url="https://accounts.google.com/o/oauth2/token",
     access_token_params=None,
     authorize_url="https://accounts.google.com/o/oauth2/auth",

@@ -23,8 +23,8 @@ def config_app(test_config=None):
         MAIL_PORT=25,
         MAIL_SERVER="smtp.gmail.com",
         MAIL_USE_TLS=True,
-        MAIL_USERNAME="yourmangd@gmail.com",
-        MAIL_PASSWORD="yourmangd321",
+        MAIL_USERNAME=os.environ['MAIL_USERNAME'],
+        MAIL_PASSWORD=os.environ['MAIL_PASSWORD'],
     )
     sess = Session(app)
     sess.init_app(app)
