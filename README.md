@@ -33,7 +33,7 @@ The user can filter the list of todos using the filter by option
 
 
 ## App structure
-
+```bash
 mangd-repo  
 │   .gitignore  
 │   Procfile  
@@ -69,7 +69,7 @@ mangd-repo
     └───users  
             routes.py  
             __init__.py  
-          
+```        
 ## UML
 <img width="816" alt="2021-11-02 (11)" src="https://user-images.githubusercontent.com/92554847/146624827-f699f878-0504-41dc-bcc2-108d5e1559ee.png">
 
