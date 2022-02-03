@@ -12,20 +12,6 @@ from mangd.extras import login_required
 from flask_mail import Message
 users = Blueprint('users', __name__)
 
-# initialize oauth
-google = oauth.register(
-    name="google",
-    client_id=os.environ['client_id'],
-    client_secret=os.environ['client_secret'],
-    access_token_url="https://accounts.google.com/o/oauth2/token",
-    access_token_params=None,
-    authorize_url="https://accounts.google.com/o/oauth2/auth",
-    authorize_params=None,
-    api_base_url="https://www.googleapis.com/oauth2/v1/",
-    userinfo_endpoint="https://openidconnect.googleapis.com/v1/userinfo",  # This is only needed if using openId to fetch user info
-    client_kwargs={"scope": "openid email profile"},
-)
-
 # register function
 @users.route("/register", methods=("GET", "POST"))
 def register():
@@ -126,38 +112,6 @@ def login():
     # User reached route via GET (as by clicking a link or via redirect)
     return render_template("login.html")
 
-
-@users.route("/google_login", methods=("GET", "POST"))
-def google_login():
-    google = oauth.create_client("google")  # create the google oauth client
-    redirect_uri = url_for("users.google_authorize", _external=True)
-    return google.authorize_redirect(redirect_uri)
-
-
-@users.route("/postmessage", methods=("GET", "POST"))
-def google_authorize():
-    google = oauth.create_client("google")  # create the google oauth client
-    token = (
-        google.authorize_access_token()
-    )  # Access token from google (needed to get user info)
-    resp = google.get("userinfo")  # userinfo contains stuff u specificed in the scrope
-    user_info = resp.json()
-    print(user_info)
-    if not user.query.filter_by(email=user_info["email"]).first():
-        usr = user(
-            user_info["email"],
-            generate_password_hash(user_info["id"]),
-            user_info["email"],
-        )
-        db.session.add(usr)
-        db.session.commit()
-        session["user_id"] = usr._id
-    else:
-        usr = user.query.filter_by(email=user_info["email"]).first()
-        session["user_id"] = usr._id
-    # and set ur own data in the session not the profile from google
-    session.permanent = True  # make the session permanant so it keeps existing after broweser gets closed
-    return redirect(url_for("todos.todos"))
 
 
 @users.route("/forgot_password", methods=("GET", "POST"))
