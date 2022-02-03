@@ -2,7 +2,7 @@
 A server-side CRUD built with Python and Flask.
 
 ## Live Demo
-http://www.mangdtodos.com/
+Linode cloud deployment using gunicorn, nginx, and supervisor: http://www.mangdtodos.com/
 
 
 ## Technologies
@@ -28,7 +28,7 @@ http://www.mangdtodos.com/
 This Server-side application allows user to register by creating a username and password and providing an email.
 The user can create a todo item and add a deadline if they wish
 Everytime the user provides a deadline, the app automatically syncs it to their google calendar and saves the id of the item so it can be deleted by the user later on.
-The user can filter the list of todos using the filter by option
+The user can filter the list of todos using the filter by option.
 
 
 ## App structure
