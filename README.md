@@ -2,7 +2,7 @@
 A server-side CRUD built with Python and Flask.
 
 ## Live Demo
-Linode cloud deployment using gunicorn, nginx, and supervisor: http://www.mangdtodos.com/
+Linode cloud deployment using gunicorn, nginx, and supervisor: https://www.mangdtodos.com/
 
 ## Video Demo
 https://www.youtube.com/watch?v=2p1uHNiWHqg
